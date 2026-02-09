@@ -1,0 +1,9 @@
+=== SECURITY NOTICE ===
+The backup admin password was found on a sticky note at workstation WS-0042.
+Someone encoded it, but not very well.
+
+Encoded value: RkxBR3tCQVNFNjRfMVNfTk9UX0VOQ1JZUFRJT059
+
+Hint: The encoding method is described in RFC 4648.
+      The scheme's name is a number that sounds like it belongs on a baseball field.
+      The flag format is FLAG{...}

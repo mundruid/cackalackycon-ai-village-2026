@@ -1,0 +1,6 @@
+An analyst found this note in a compromised server's /tmp directory:
+
+Gur cnffjbeq vf: SYNT{EBG13_VF_ABG_FRPHER}
+
+The analyst noted the suspect was a fan of Julius Caesar's simpler cousin.
+One who only shifts by half the alphabet.

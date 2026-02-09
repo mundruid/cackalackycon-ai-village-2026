@@ -1,0 +1,31 @@
+=== DOCUMENT METADATA EXTRACTION ===
+Source: suspicious_proposal.docx found on finance workstation WS-0117
+
+File Properties:
+  Author: JSmith_Corp
+  Last Modified By: d4rkph0en1x
+  Company: Initech Global Solutions
+  Created: 2025-08-14T09:23:00Z
+  Modified: 2025-08-14T23:47:00Z
+  Application: Microsoft Word 2019
+
+Custom Properties:
+  Project_Code: ARES-7
+  Classification: INTERNAL_ONLY
+  Tracking_ID: 4f8a2b1c
+
+Embedded URLs found in document body:
+  - https://initech-global.com/portal        (legitimate company portal)
+  - https://1n1tech-gl0bal.com/upload         (suspicious — note the character swaps)
+
+Embedded Macro SHA256:
+  a3f2c8d1e5b7094f6a2c8d1e5b7094f6a2c8d1e5b7094f6a2c8d1e5b7094f6
+
+Question: What is the handle of the threat actor who modified this document?
+
+The flag is: FLAG{<threat_actor_handle>}
+
+Hints:
+  - Compare the "Author" field to the "Last Modified By" field
+  - One looks like a corporate username. The other... doesn't.
+  - Think about the modification timestamp — who works at 23:47?
