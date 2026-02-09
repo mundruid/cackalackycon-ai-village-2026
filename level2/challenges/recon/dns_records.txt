@@ -1,0 +1,21 @@
+;; DNS ENUMERATION RESULTS
+;; Target: initech.local
+;; Tool: dig + zone transfer attempt
+
+;; ANSWER SECTION:
+initech.local.             IN  A     10.10.10.50
+www.initech.local.         IN  CNAME initech.local.
+mail.initech.local.        IN  A     10.10.10.51
+dev.initech.local.         IN  A     10.10.10.52
+staging.initech.local.     IN  A     10.10.10.50
+jenkins.initech.local.     IN  A     10.10.10.50
+db.initech.local.          IN  A     10.10.10.50
+vpn.initech.local.         IN  A     10.10.10.53
+
+;; [FLAG_PART_3: _RECON]
+
+;; NOTES:
+;; - Zone transfer (AXFR) was permitted — this is a misconfiguration
+;; - dev, staging, jenkins, and db all resolve to the same host (10.10.10.50)
+;; - This indicates multiple services consolidated on a single server
+;; - mail and vpn are on separate hosts

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<nmaprun scanner="nmap" args="nmap -sV -O -oX scan.xml 10.10.10.50" start="1693500000" version="7.94">
+  <host starttime="1693500001" endtime="1693500060">
+    <status state="up" reason="echo-reply"/>
+    <address addr="10.10.10.50" addrtype="ipv4"/>
+    <hostnames>
+      <hostname name="web01.initech.local" type="PTR"/>
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="22">
+        <state state="open" reason="syn-ack"/>
+        <service name="ssh" product="OpenSSH" version="7.6p1" extrainfo="Ubuntu 4ubuntu0.7" ostype="Linux" method="probed"/>
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack"/>
+        <service name="http" product="Apache httpd" version="2.4.49" extrainfo="(Ubuntu)" method="probed"/>
+        <!-- [FLAG_PART_1: MULTI] -->
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="open" reason="syn-ack"/>
+        <service name="https" product="Apache httpd" version="2.4.49" extrainfo="(Ubuntu)" method="probed"/>
+      </port>
+      <port protocol="tcp" portid="3306">
+        <state state="open" reason="syn-ack"/>
+        <service name="mysql" product="MySQL" version="5.7.34" method="probed"/>
+      </port>
+      <port protocol="tcp" portid="8080">
+        <state state="open" reason="syn-ack"/>
+        <service name="http-proxy" product="Jenkins" version="2.289.1" method="probed"/>
+      </port>
+    </ports>
+    <os>
+      <osmatch name="Linux 4.15 - 5.6" accuracy="95">
+        <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="4.X"/>
+      </osmatch>
+    </os>
+  </host>
+</nmaprun>

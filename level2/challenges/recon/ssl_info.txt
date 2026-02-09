@@ -1,0 +1,39 @@
+=== SSL/TLS CERTIFICATE AND CIPHER ANALYSIS ===
+Target: 10.10.10.50:443
+Tool: sslscan / testssl.sh
+
+--- Certificate Details ---
+Subject:     CN=initech.local
+Issuer:      CN=initech.local (SELF-SIGNED)
+Valid From:  2024-01-01 00:00:00 UTC
+Valid To:    2025-01-01 00:00:00 UTC  *** EXPIRED ***
+Serial:      0x1A2B3C4D
+Sig Algo:    sha256WithRSAEncryption
+Key Size:    2048 bit RSA
+SANs:        DNS:initech.local, DNS:www.initech.local
+
+--- Protocol Support ---
+SSLv2:    DISABLED (good)
+SSLv3:    DISABLED (good)
+TLSv1.0:  ENABLED  *** INSECURE — deprecated per RFC 8996 ***
+TLSv1.1:  ENABLED  *** INSECURE — deprecated per RFC 8996 ***
+TLSv1.2:  ENABLED  (acceptable)
+TLSv1.3:  DISABLED *** RECOMMENDED — should be enabled ***
+
+--- Cipher Suites (Weak/Insecure) ---
+TLS_RSA_WITH_RC4_128_SHA          *** INSECURE — RC4 is broken ***
+TLS_RSA_WITH_3DES_EDE_CBC_SHA     *** WEAK — 3DES Sweet32 attack ***
+TLS_RSA_WITH_AES_128_CBC_SHA      (acceptable but no PFS)
+
+--- Cipher Suites (Strong) ---
+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384  (strong)
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256  (strong)
+
+--- Vulnerabilities ---
+BEAST:      Potentially vulnerable (TLS 1.0 enabled)
+POODLE:     Not vulnerable (SSLv3 disabled)
+Heartbleed: Not vulnerable
+ROBOT:      Not vulnerable
+Sweet32:    Potentially vulnerable (3DES enabled)
+
+[FLAG_PART_5: _ROCKS]

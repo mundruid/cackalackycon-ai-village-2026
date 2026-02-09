@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CVE-2021-41773",
+    "software": "Apache httpd",
+    "versions_affected": "2.4.49",
+    "cvss": 7.5,
+    "severity": "HIGH",
+    "description": "Path traversal vulnerability in Apache HTTP Server 2.4.49 allows an attacker to map URLs to files outside the directories configured by Alias-like directives. If CGI scripts are enabled for these aliased paths, this could allow remote code execution."
+  },
+  {
+    "id": "CVE-2021-42013",
+    "software": "Apache httpd",
+    "versions_affected": "2.4.49, 2.4.50",
+    "cvss": 9.8,
+    "severity": "CRITICAL",
+    "description": "Path traversal and remote code execution in Apache HTTP Server 2.4.49 and 2.4.50. The fix for CVE-2021-41773 in Apache 2.4.50 was insufficient. This vulnerability is actively exploited in the wild."
+  },
+  {
+    "id": "CVE-2024-23897",
+    "software": "Jenkins",
+    "versions_affected": "< 2.442, LTS < 2.426.3",
+    "cvss": 9.8,
+    "severity": "CRITICAL",
+    "description": "Jenkins 2.441 and earlier, LTS 2.426.2 and earlier does not disable a feature of its CLI command parser that replaces '@' followed by a file path with the file's contents, allowing unauthenticated attackers to read arbitrary files on the Jenkins controller file system."
+  },
+  {
+    "id": "CVE-2023-48795",
+    "software": "OpenSSH",
+    "versions_affected": "< 9.6",
+    "cvss": 5.9,
+    "severity": "MEDIUM",
+    "description": "The SSH transport protocol with certain OpenSSH extensions allows remote attackers to bypass integrity checks (Terrapin attack) such that some features are downgraded or disabled."
+  },
+  {
+    "id": "CVE-2023-20861",
+    "software": "MySQL",
+    "versions_affected": "5.7.x < 5.7.42, 8.0.x < 8.0.33",
+    "cvss": 4.9,
+    "severity": "MEDIUM",
+    "description": "Vulnerability in MySQL Server product of Oracle MySQL (component: Server: Optimizer). A high privileged attacker with network access via multiple protocols can cause a hang or frequently repeatable crash (denial of service)."
+  },
+  {
+    "id": "CVE-2023-22809",
+    "software": "OpenSSH",
+    "versions_affected": "< 9.3p2",
+    "cvss": 7.8,
+    "severity": "HIGH",
+    "description": "In OpenSSH before 9.3p2, ssh-agent's PKCS#11 support could be leveraged by a remote attacker who can connect to the ssh-agent UNIX domain socket to achieve code execution."
+  }
+]

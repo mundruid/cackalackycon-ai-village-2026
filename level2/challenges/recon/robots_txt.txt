@@ -1,0 +1,20 @@
+# robots.txt for initech.local
+# Retrieved via: curl http://10.10.10.50/robots.txt
+
+User-agent: *
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /api/v1/debug/
+Disallow: /old-portal/
+Disallow: /.git/
+Disallow: /phpinfo.php
+Disallow: /server-status
+
+# [FLAG_PART_4: _AGENT]
+
+# Security notes:
+# - /backup/ directory should NOT be web-accessible
+# - /.git/ exposure means source code can be reconstructed
+# - /phpinfo.php leaks full server configuration
+# - /server-status is an Apache status page (info leak)
+# - /api/v1/debug/ suggests a debug endpoint in production
