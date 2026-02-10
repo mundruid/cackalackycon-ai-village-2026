@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ALERT-20250915-001",
+    "timestamp": "2025-09-15T02:14:33Z",
+    "alert_name": "Multiple Failed SSH Logins",
+    "severity": "MEDIUM",
+    "source_ip": "198.51.100.23",
+    "dest_ip": "10.0.5.20",
+    "dest_hostname": "web01.initech.local",
+    "details": "47 failed SSH login attempts in 60 seconds targeting root account. Source IP is external."
+  },
+  {
+    "id": "ALERT-20250915-002",
+    "timestamp": "2025-09-15T02:15:01Z",
+    "alert_name": "Successful SSH Login After Brute Force",
+    "severity": "HIGH",
+    "source_ip": "198.51.100.23",
+    "dest_ip": "10.0.5.20",
+    "dest_hostname": "web01.initech.local",
+    "details": "Successful root SSH login from same IP that was brute-forcing 28 seconds prior. High confidence compromise."
+  },
+  {
+    "id": "ALERT-20250915-003",
+    "timestamp": "2025-09-15T02:15:12Z",
+    "alert_name": "Suspicious File Download",
+    "severity": "HIGH",
+    "source_ip": "10.0.5.20",
+    "dest_ip": "192.0.2.100",
+    "dest_hostname": "web01.initech.local",
+    "details": "curl download of executable script from external IP immediately after SSH compromise. File: /tmp/.beacon.sh (hidden file)."
+  },
+  {
+    "id": "ALERT-20250915-004",
+    "timestamp": "2025-09-15T02:17:45Z",
+    "alert_name": "Outbound Connection to Known Malicious IP",
+    "severity": "CRITICAL",
+    "source_ip": "10.0.5.20",
+    "dest_ip": "192.0.2.100",
+    "dest_hostname": "web01.initech.local",
+    "details": "Outbound HTTPS connection to IP flagged in threat intelligence feeds. 30-second beacon interval detected. Probable C2 channel."
+  },
+  {
+    "id": "ALERT-20250915-005",
+    "timestamp": "2025-09-15T02:20:12Z",
+    "alert_name": "Lateral Movement Detected",
+    "severity": "CRITICAL",
+    "source_ip": "10.0.5.20",
+    "dest_ip": "10.0.5.30",
+    "dest_hostname": "db01.initech.local",
+    "details": "SMB (port 445) and WMI (port 135) connections from compromised web server to database server. Tool signature matches wmiexec.py (Impacket)."
+  },
+  {
+    "id": "ALERT-20250915-006",
+    "timestamp": "2025-09-15T02:21:00Z",
+    "alert_name": "Database Dump Initiated",
+    "severity": "CRITICAL",
+    "source_ip": "10.0.5.30",
+    "dest_ip": null,
+    "dest_hostname": "db01.initech.local",
+    "details": "mysqldump --all-databases executed on database server with SYSTEM privileges. Output: /tmp/dump.sql (compressed to 2.3GB)."
+  },
+  {
+    "id": "ALERT-20250915-007",
+    "timestamp": "2025-09-15T02:24:00Z",
+    "alert_name": "Large Data Transfer to External IP",
+    "severity": "CRITICAL",
+    "source_ip": "10.0.5.30",
+    "dest_ip": "192.0.2.100",
+    "dest_hostname": "db01.initech.local",
+    "details": "2.3GB data transfer over HTTPS to known C2 IP (192.0.2.100). Transfer completed in approximately 60 seconds. Probable data exfiltration of full database dump."
+  }
+]

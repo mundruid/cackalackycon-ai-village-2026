@@ -234,37 +234,32 @@ def check_cve(search_term: str) -> str:
 # AGENT
 # =============================================================
 
-SYSTEM_PROMPT = """You are a professional penetration tester conducting an authorized
-reconnaissance analysis. You are methodical, thorough, and systematic.
-
-You have access to these tools:
-1. read_file — read any challenge file (briefings, DNS, robots.txt, SSL info, etc.)
-2. search_web — web search for OSINT
-3. parse_nmap — parse pre-captured nmap XML scan results
-4. analyze_headers — analyze HTTP response headers for security issues
-5. check_cve — look up CVEs from a local vulnerability database
-
-YOUR WORKFLOW (follow this order):
-1. Read the briefing.txt file FIRST to understand the mission
-2. Parse the nmap scan to identify open ports and services
-3. For EACH service version found, check the CVE database
-4. Analyze HTTP headers for misconfigurations
-5. Read ALL remaining recon files (DNS, robots.txt, SSL info)
-6. Look for flag fragments marked [FLAG_PART_N] in each file
-7. Assemble all flag parts in order to form the complete flag
-
-IMPORTANT:
-- Do not skip any file — each one contains intelligence AND a flag fragment
-- When you find a service version, ALWAYS check it against the CVE database
-- Cross-reference findings: if nmap shows Apache 2.4.49 AND headers confirm it, note the correlation
-- Your final output should be a structured threat assessment
-
-FINAL OUTPUT FORMAT:
-1. Executive Summary (2-3 sentences)
-2. Critical Findings (with CVE IDs and CVSS scores)
-3. Attack Surface Summary
-4. Recommended Remediations (prioritized by severity)
-5. ASSEMBLED FLAG from all [FLAG_PART_N] fragments"""
+# =============================================================
+# TODO: Write your system prompt here!
+# =============================================================
+# This is the "brain" of your agent — it tells the LLM what role to play,
+# what tools it has, and how to approach the task.
+#
+# Your prompt should include:
+#   1. The agent's role/persona (e.g., "You are a penetration tester...")
+#   2. A list of available tools and what each does
+#   3. A workflow or step-by-step approach
+#   4. Instructions for finding and assembling FLAG_PART fragments
+#   5. The expected output format (threat assessment structure)
+#
+# Tips:
+#   - Be specific about the order of operations
+#   - Tell the agent to check service versions against the CVE database
+#   - Remind it to read ALL files (each contains a flag fragment)
+#   - Define a clear output format (Executive Summary, Findings, etc.)
+#
+# Example structure:
+#   "You are a [ROLE]. You have access to these tools: [LIST TOOLS].
+#    Your workflow: [STEPS]. Output format: [FORMAT]."
+#
+SYSTEM_PROMPT = """
+YOUR PROMPT HERE
+"""
 
 tools = [read_file, search_web, parse_nmap, analyze_headers, check_cve]
 agent = create_react_agent(llm, tools)
@@ -278,14 +273,23 @@ if __name__ == "__main__":
     print("🔍 CackalackyCon 2026 — Level 2: The Recon Agent")
     print("Multi-step reconnaissance analysis. Follow the briefing.\n")
 
+    # =============================================================
+    # TODO: Write your initial message to the agent here!
+    # =============================================================
+    # This is the first instruction your agent receives. It should:
+    #   - Tell the agent to start the mission
+    #   - Point it to the briefing file
+    #   - Remind it to collect flag fragments
+    #
+    # Example: "Begin your analysis. Start by reading briefing.txt..."
+    #
+    USER_MESSAGE = """
+YOUR INITIAL MESSAGE HERE
+"""
+
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(
-            content="""Begin your reconnaissance analysis.
-Start by reading the briefing file at 'briefing.txt' for your mission objectives.
-Then systematically analyze ALL data sources and produce your threat assessment.
-Don't forget to collect all flag fragments!"""
-        ),
+        HumanMessage(content=USER_MESSAGE),
     ]
 
     print("🚀 Agent starting reconnaissance...\n")

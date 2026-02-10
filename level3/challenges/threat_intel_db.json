@@ -1,0 +1,38 @@
+[
+  {
+    "indicator": "198.51.100.23",
+    "type": "ipv4",
+    "threat_actor": "PHANTOM_VIPER",
+    "campaign": "OPERATION_NIGHTFALL",
+    "confidence": "HIGH",
+    "first_seen": "2025-06-01",
+    "tags": ["brute_force", "initial_access", "eastern_europe"]
+  },
+  {
+    "indicator": "192.0.2.100",
+    "type": "ipv4",
+    "threat_actor": "PHANTOM_VIPER",
+    "campaign": "OPERATION_NIGHTFALL",
+    "confidence": "HIGH",
+    "first_seen": "2025-07-15",
+    "tags": ["c2_server", "data_exfiltration", "cobalt_strike"]
+  },
+  {
+    "indicator": "beacon.sh",
+    "type": "filename",
+    "threat_actor": "PHANTOM_VIPER",
+    "campaign": "OPERATION_NIGHTFALL",
+    "confidence": "MEDIUM",
+    "first_seen": "2025-08-01",
+    "tags": ["persistence", "reverse_shell", "bash_dropper"]
+  },
+  {
+    "indicator": "wmiexec.py",
+    "type": "tool",
+    "threat_actor": "MULTIPLE",
+    "campaign": "GENERIC",
+    "confidence": "LOW",
+    "first_seen": "2020-01-01",
+    "tags": ["lateral_movement", "impacket", "living_off_the_land"]
+  }
+]

