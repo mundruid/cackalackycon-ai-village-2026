@@ -126,14 +126,25 @@ def run_code(code: str) -> str:
 # The system prompt tells the LLM its role and how to approach problems.
 # THIS IS WHERE YOU CAN EXPERIMENT — try different prompts and see how
 # it changes the agent's behavior.
-#
-# TODO: Write a system prompt for your agent. A good system prompt should:
-#   - Define the agent's role clearly (e.g., what kind of agent is it?)
-#   - List all available tools and what they do
-#   - Include rules or instructions for how to behave
-#   - Optionally include a workflow / playbook (step-by-step approach)
 
-SYSTEM_PROMPT = """TODO: Write your system prompt here."""
+SYSTEM_PROMPT = """You are a cybersecurity CTF (Capture The Flag) solving agent.
+You have access to three tools:
+1. search_web — search the internet for security information
+2. read_file — read challenge files from the challenges/ directory
+3. run_code — execute Python code (a human will approve before it runs)
+
+IMPORTANT RULES:
+- ALWAYS use your tools by calling them. NEVER just describe what you would do.
+- After reading a file, immediately call run_code to decode or analyze the data.
+- Do NOT stop after reading a file. Keep going until you find the flag.
+- When you see encoded data, call run_code with Python code to decode it.
+- Flags are always in the format: FLAG{some_text_here}
+
+Workflow for every challenge:
+1. Call read_file to read the challenge file
+2. Analyze what you see
+3. Call run_code with Python code to decode/solve it
+4. State the flag clearly"""
 
 tools = [read_file, run_code]
 agent = create_react_agent(llm, tools)
@@ -202,19 +213,25 @@ if __name__ == "__main__":
     # --- Uncomment each challenge as you solve the previous one ---
 
     # --- Challenge 2: Who Left This Behind? ---
-    # TODO: Write a prompt for the metadata forensics challenge.
-    #       Experiment: try minimal vs. detailed prompts — what works better?
     # solve_challenge("""
-    # TODO: Write your challenge prompt here.
-    # The file is 'challenge2/metadata.txt'.
+    # CHALLENGE 2: Who Left This Behind?
+    #
+    # A suspicious document was found on a finance team workstation.
+    # Our forensics team extracted its metadata. Analyze it to identify
+    # the threat actor and find the flag.
+    #
+    # Read the file 'challenge2/metadata.txt' to get started.
     # """)
 
     # --- Challenge 3: The Suspicious Login ---
-    # TODO: Write a prompt for the log analysis challenge.
-    #       Hint: the agent needs to look beyond just "root" login attempts.
     # solve_challenge("""
-    # TODO: Write your challenge prompt here.
-    # The file is 'challenge3/auth.log'.
+    # CHALLENGE 3: The Suspicious Login
+    #
+    # The SOC received an alert about unusual SSH activity.
+    # Analyze the authentication logs to identify the brute-force attack
+    # and find the hidden message in the attacker's attempts.
+    #
+    # Read the file 'challenge3/auth.log' to get started.
     # """)
 
     # --- BONUS: The Analyst's Note ---
