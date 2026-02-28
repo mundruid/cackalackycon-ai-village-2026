@@ -23,6 +23,8 @@ import xml.etree.ElementTree as ET
 from langchain_ollama import ChatOllama
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
+import warnings
+warnings.filterwarnings("ignore", message="create_react_agent has been moved")
 from langgraph.prebuilt import create_react_agent
 
 
@@ -30,7 +32,7 @@ from langgraph.prebuilt import create_react_agent
 # CONFIG
 # =============================================================
 
-llm = ChatOllama(model="llama3.1:8b", temperature=0)
+llm = ChatOllama(model="llama3.1:8b", temperature=0.1)
 CHALLENGES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "challenges")
 
 
@@ -95,6 +97,12 @@ def parse_nmap(file_path: str) -> str:
         if not safe_path.startswith(os.path.normpath(CHALLENGES_DIR)):
             return "Access denied."
 
+        # Also scan raw XML for flag parts hidden in comments
+        import re
+        with open(safe_path, "r") as f:
+            raw_xml = f.read()
+        flag_parts = re.findall(r'\[FLAG_PART_\d+:\s*[^\]]+\]', raw_xml)
+
         tree = ET.parse(safe_path)
         root = tree.getroot()
         results = []
@@ -124,7 +132,10 @@ def parse_nmap(file_path: str) -> str:
 
             results.append(host_info)
 
-        return json.dumps(results, indent=2)
+        output = json.dumps(results, indent=2)
+        if flag_parts:
+            output += "\n\nHidden data found in XML comments:\n" + "\n".join(flag_parts)
+        return output
     except Exception as e:
         return f"Error parsing nmap XML: {str(e)}"
 
@@ -198,7 +209,7 @@ def check_cve(search_term: str) -> str:
         with open(db_path, "r") as f:
             cve_db = json.load(f)
 
-        search_lower = search_term.lower()
+        search_words = search_term.lower().split()
         matches = []
 
         for cve in cve_db:
@@ -210,7 +221,8 @@ def check_cve(search_term: str) -> str:
                     cve.get("versions_affected", ""),
                 ]
             ).lower()
-            if search_lower in searchable:
+            # Match if ANY search word appears in the searchable text
+            if any(word in searchable for word in search_words):
                 matches.append(cve)
 
         if not matches:
@@ -237,31 +249,24 @@ def check_cve(search_term: str) -> str:
 # =============================================================
 # TODO: Write your system prompt here!
 # =============================================================
-# This is the "brain" of your agent — it tells the LLM what role to play,
-# what tools it has, and how to approach the task.
+# The system prompt defines your agent's identity and behavior.
+# Keep it SHORT — small models respond better to concise prompts.
+# Put detailed step-by-step instructions in the USER_MESSAGE instead.
 #
-# Your prompt should include:
-#   1. The agent's role/persona (e.g., "You are a penetration tester...")
-#   2. A list of available tools and what each does
-#   3. A workflow or step-by-step approach
-#   4. Instructions for finding and assembling FLAG_PART fragments
-#   5. The expected output format (threat assessment structure)
+# Your system prompt should include:
+#   1. A clear role (e.g., "You are a security analyst...")
+#   2. What the agent should look for (flag tags in files)
+#   3. How to use check_cve (search by software name, e.g. "Apache")
 #
-# Tips:
-#   - Be specific about the order of operations
-#   - Tell the agent to check service versions against the CVE database
-#   - Remind it to read ALL files (each contains a flag fragment)
-#   - Define a clear output format (Executive Summary, Findings, etc.)
+# Pitfalls to avoid:
+#   - Too much detail in the system prompt can cause the model to
+#     "plan" instead of "act" (it outputs JSON instead of calling tools)
+#   - Listing every tool is optional — the model can see tool descriptions
+#   - Don't duplicate instructions between system prompt and user message
 #
-# Example structure:
-#   "You are a [ROLE]. You have access to these tools: [LIST TOOLS].
-#    Your workflow: [STEPS]. Output format: [FORMAT]."
-#
-SYSTEM_PROMPT = """
-YOUR PROMPT HERE
-"""
+SYSTEM_PROMPT = """TODO: Write your system prompt here."""
 
-tools = [read_file, search_web, parse_nmap, analyze_headers, check_cve]
+tools = [read_file, parse_nmap, analyze_headers, check_cve]
 agent = create_react_agent(llm, tools)
 
 
@@ -276,16 +281,17 @@ if __name__ == "__main__":
     # =============================================================
     # TODO: Write your initial message to the agent here!
     # =============================================================
-    # This is the first instruction your agent receives. It should:
-    #   - Tell the agent to start the mission
-    #   - Point it to the briefing file
-    #   - Remind it to collect flag fragments
+    # This is the first instruction your agent receives. Tips:
+    #   - Tell the agent which files to read and in what order
+    #   - Use EXACT file paths (e.g. 'recon/scan_results.xml' not 'recon/nmap_results.xml')
+    #   - Small models work better with explicit step-by-step instructions
+    #   - Remind it to look for [FLAG_PART_N: value] tags in each file
+    #   - Tell it how to assemble the final flag from the parts
     #
-    # Example: "Begin your analysis. Start by reading briefing.txt..."
+    # Experiment: Try a vague message vs. a very specific one.
+    #   Which gets better results from the model?
     #
-    USER_MESSAGE = """
-YOUR INITIAL MESSAGE HERE
-"""
+    USER_MESSAGE = """TODO: Write your initial message here."""
 
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
@@ -295,7 +301,7 @@ YOUR INITIAL MESSAGE HERE
     print("🚀 Agent starting reconnaissance...\n")
 
     try:
-        result = agent.invoke({"messages": messages}, {"recursion_limit": 25})
+        result = agent.invoke({"messages": messages}, {"recursion_limit": 40})
 
         for msg in result["messages"]:
             if hasattr(msg, "content") and msg.content:
@@ -305,7 +311,7 @@ YOUR INITIAL MESSAGE HERE
                     print(msg.content[:3000])
                 elif role == "ToolMessage":
                     print(f"\n🔧 [{msg.name}] result:")
-                    print(msg.content[:500])
+                    print(msg.content[:1000])
                     if len(msg.content) > 500:
                         print("  ... (truncated)")
 

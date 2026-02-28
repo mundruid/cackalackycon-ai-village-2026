@@ -22,6 +22,8 @@ import os
 from langchain_ollama import ChatOllama
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
+import warnings
+warnings.filterwarnings("ignore", message="create_react_agent has been moved")
 from langgraph.prebuilt import create_react_agent
 
 
