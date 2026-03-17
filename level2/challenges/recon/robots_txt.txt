@@ -10,8 +10,6 @@ Disallow: /.git/
 Disallow: /phpinfo.php
 Disallow: /server-status
 
-# [FLAG_PART_4: _AGENT]
-
 # Security notes:
 # - /backup/ directory should NOT be web-accessible
 # - /.git/ exposure means source code can be reconstructed

@@ -14,7 +14,7 @@
       <port protocol="tcp" portid="80">
         <state state="open" reason="syn-ack"/>
         <service name="http" product="Apache httpd" version="2.4.49" extrainfo="(Ubuntu)" method="probed"/>
-        <!-- [FLAG_PART_1: MULTI] -->
+        <!-- [FLAG_PART_1: RECON] -->
       </port>
       <port protocol="tcp" portid="443">
         <state state="open" reason="syn-ack"/>

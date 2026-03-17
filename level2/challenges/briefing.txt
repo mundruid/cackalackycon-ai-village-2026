@@ -20,16 +20,17 @@ Also available:
 MISSION:
   Step 1: Parse the nmap scan to identify all open ports and services
   Step 2: Analyze HTTP headers for security misconfigurations
-  Step 3: Cross-reference discovered service versions against the CVE database
-  Step 4: Review ALL other recon files for additional intelligence
-  Step 5: Produce a threat assessment with:
-          - Critical findings (with CVE references where applicable)
+  Step 3: Review the SSL/TLS details for weaknesses
+  Step 4: Produce a threat assessment with:
+          - Critical findings
           - Attack surface summary
-          - Prioritized remediation recommendations
           - The assembled flag
 
 FLAG INSTRUCTIONS:
-  Each data file contains one fragment marked with [FLAG_PART_N: value]
-  Collect ALL five parts and concatenate the values to form: FLAG{part1part2part3part4part5}
+  Three of the data files contain a fragment marked with [FLAG_PART_N: value]:
+    - recon/scan_results.xml  → FLAG_PART_1
+    - recon/http_headers.txt  → FLAG_PART_2
+    - recon/ssl_info.txt      → FLAG_PART_3
+  Concatenate the three values to form: FLAG{part1part2part3}
 
 Good hunting.

@@ -12,8 +12,6 @@ jenkins.initech.local.     IN  A     10.10.10.50
 db.initech.local.          IN  A     10.10.10.50
 vpn.initech.local.         IN  A     10.10.10.53
 
-;; [FLAG_PART_3: _RECON]
-
 ;; NOTES:
 ;; - Zone transfer (AXFR) was permitted — this is a misconfiguration
 ;; - dev, staging, jenkins, and db all resolve to the same host (10.10.10.50)

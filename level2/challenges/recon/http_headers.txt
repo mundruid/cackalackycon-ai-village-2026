@@ -4,6 +4,6 @@ X-Powered-By: PHP/7.4.3
 Content-Type: text/html; charset=UTF-8
 Content-Length: 14832
 Set-Cookie: PHPSESSID=abc123def456; path=/; HttpOnly
-X-Debug-Token: [FLAG_PART_2: _STEP]
+X-Debug-Token: [FLAG_PART_2: _AGENT]
 Connection: keep-alive
 Date: Sun, 01 Sep 2025 12:00:00 GMT

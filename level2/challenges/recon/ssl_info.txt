@@ -36,4 +36,4 @@ Heartbleed: Not vulnerable
 ROBOT:      Not vulnerable
 Sweet32:    Potentially vulnerable (3DES enabled)
 
-[FLAG_PART_5: _ROCKS]
+[FLAG_PART_3: _ROCKS]
