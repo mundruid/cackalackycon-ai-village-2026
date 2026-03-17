@@ -15,10 +15,12 @@ Run with:
 
 import os
 import json
+import warnings
 from typing import TypedDict
 from langchain_ollama import ChatOllama
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
+warnings.filterwarnings("ignore", message="create_react_agent has been moved")
 from langgraph.prebuilt import create_react_agent
 from langgraph.graph import StateGraph, END
 
@@ -30,7 +32,7 @@ from langgraph.graph import StateGraph, END
 # Using the smaller model — 3 agents means 3x the inference work.
 # llama3.2:3b is fast and focused enough for specialized tasks.
 # If you have 16GB+ RAM, try llama3.1:8b for better results.
-MODEL = "llama3.2:3b"
+MODEL = "llama3.1:8b"
 
 llm = ChatOllama(model=MODEL, temperature=0)
 CHALLENGES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "challenges")
