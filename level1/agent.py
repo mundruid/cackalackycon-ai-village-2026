@@ -9,15 +9,18 @@ Build a security-focused agent with two tools:
 Your agent will solve CTF challenges using these tools.
 
 Run with:
-    uv run python level1/agent.py
+    uv run python level1/agent.py                # runs all challenges
+    uv run python level1/agent.py --challenge 1  # runs just challenge 1
+    uv run python level1/agent.py -c bonus       # runs just the bonus
 
 Challenges:
     1. The Encoded Password    — decode a suspicious string
     2. Who Left This Behind?   — OSINT forensics from document metadata
-    3. The Suspicious Login    — find the hidden message in auth logs
+    3. The Onion               — double encoded string
     BONUS: The Analyst's Note  — classic cipher challenge
 """
 
+import argparse
 import os
 from langchain_ollama import ChatOllama
 from langchain_core.tools import tool
@@ -55,7 +58,7 @@ def read_file(file_path: str) -> str:
     log files, metadata, configuration files, or any text-based evidence.
 
     Input: a file path relative to the challenges/ directory.
-           Examples: 'challenge1/hint.txt', 'challenge3/auth.log'
+           Examples: 'challenge1/hint.txt', 'challenge3/encoded.txt'
     Returns: the file contents (truncated to 5000 chars if very large).
     """
     try:
@@ -130,10 +133,9 @@ def run_code(code: str) -> str:
 # it changes the agent's behavior.
 
 SYSTEM_PROMPT = """You are a cybersecurity CTF (Capture The Flag) solving agent.
-You have access to three tools:
-1. search_web — search the internet for security information
-2. read_file — read challenge files from the challenges/ directory
-3. run_code — execute Python code (a human will approve before it runs)
+You have access to two tools:
+1. read_file — read challenge files from the challenges/ directory
+2. run_code — execute Python code (a human will approve before it runs)
 
 IMPORTANT RULES:
 - ALWAYS use your tools by calling them. NEVER just describe what you would do.
@@ -199,47 +201,68 @@ def solve_challenge(challenge_description: str):
 # =============================================================
 
 if __name__ == "__main__":
+    # Each challenge is a (name, prompt) pair. Leave a prompt empty to skip it
+    # — useful for the bonus, where you write your own prompt.
+    challenges = {
+        "1": (
+            "Challenge 1: The Encoded Password",
+            """
+            CHALLENGE 1: The Encoded Password
+
+            An incident responder found an encoded string on a sticky note
+            at a compromised workstation. Your job: decode it and find the flag.
+
+            Read the file 'challenge1/hint.txt' to get started.
+            """,
+        ),
+        "2": (
+            "Challenge 2: Who Left This Behind?",
+            """
+            CHALLENGE 2: Who Left This Behind?
+
+            A suspicious document was found on a finance team workstation.
+            Our forensics team extracted its metadata. Analyze it to identify
+            the threat actor and find the flag.
+
+            Read the file 'challenge2/metadata.txt' to get started.
+            """,
+        ),
+        "3": (
+            "Challenge 3: The Onion",
+            """
+            CHALLENGE 3: The Onion
+
+            A threat actor left behind an encoded string on a compromised system.
+            Your job: decode it and find the flag.
+
+            Read the file 'challenge3/encoded.txt' to get started.
+            """,
+        ),
+        "bonus": (
+            "BONUS: The Analyst's Note",
+            # TODO: Write your bonus challenge prompt here. The file is 'bonus/crypto_note.txt'.
+            #       Experiment: does hinting at the cipher type help the agent?
+            "",
+        ),
+    }
+
+    parser = argparse.ArgumentParser(description="L1 Solo Agent — runs CTF challenges.")
+    parser.add_argument(
+        "-c", "--challenge",
+        choices=list(challenges.keys()) + ["all"],
+        default="all",
+        help="Which challenge to run (default: all). The bonus is skipped until you fill in its prompt.",
+    )
+    args = parser.parse_args()
+
     print("🤖 CackalackyCon 2026 — Level 1: The Solo Agent")
     print("Build a security agent. Solve the challenges. Find the flags.\n")
 
-    # --- Challenge 1: The Encoded Password ---
-    solve_challenge("""
-    CHALLENGE 1: The Encoded Password
+    selected = list(challenges.keys()) if args.challenge == "all" else [args.challenge]
 
-    An incident responder found an encoded string on a sticky note
-    at a compromised workstation. Your job: decode it and find the flag.
-
-    Read the file 'challenge1/hint.txt' to get started.
-    """)
-
-    # --- Uncomment each challenge as you solve the previous one ---
-
-    # --- Challenge 2: Who Left This Behind? ---
-    # solve_challenge("""
-    # CHALLENGE 2: Who Left This Behind?
-    #
-    # A suspicious document was found on a finance team workstation.
-    # Our forensics team extracted its metadata. Analyze it to identify
-    # the threat actor and find the flag.
-    #
-    # Read the file 'challenge2/metadata.txt' to get started.
-    # """)
-
-    # --- Challenge 3: The Suspicious Login ---
-    # solve_challenge("""
-    # CHALLENGE 3: The Suspicious Login
-    #
-    # The SOC received an alert about unusual SSH activity.
-    # Analyze the authentication logs to identify the brute-force attack
-    # and find the hidden message in the attacker's attempts.
-    #
-    # Read the file 'challenge3/auth.log' to get started.
-    # """)
-
-    # --- BONUS: The Analyst's Note ---
-    # TODO: Write a prompt for the cipher challenge.
-    #       Experiment: does hinting at the cipher type help the agent?
-    # solve_challenge("""
-    # TODO: Write your challenge prompt here.
-    # The file is 'bonus/crypto_note.txt'.
-    # """)
+    for key in selected:
+        name, prompt = challenges[key]
+        if not prompt.strip():
+            print(f"\n⏭️  Skipping {name} — no prompt provided yet.\n")
+            continue
+        solve_challenge(prompt)

@@ -2,19 +2,22 @@
 CackalackyCon 2026 — Level 2: The Recon Agent
 ==============================================
 
+Level 2 has two challenges. This file is Challenge A — The Recon Agent.
+For Challenge B — The Malware Analyst — see level2/challenges/malware/agent.py.
+
 A multi-step reconnaissance agent that analyzes pre-captured security data.
 No live scanning — all data is in files. Your agent chains tool outputs
 together to build a complete threat assessment.
 
 Tools:
-  1. read_file      — read any challenge file
-  2. search_web     — OSINT lookups (internet permitting)
-  3. parse_nmap     — parse pre-captured nmap XML scan results
+  1. read_file       — read any challenge file
+  2. search_web      — OSINT lookups (internet permitting)
+  3. parse_nmap      — parse pre-captured nmap XML scan results
   4. analyze_headers — check HTTP headers for security misconfigurations
-  5. check_cve      — look up CVEs from a local vulnerability database
+  5. check_cve       — look up CVEs from a local vulnerability database
 
 Run with:
-    uv run python level2/agent.py
+    uv run python level2/challenges/recon/agent.py
 """
 
 import os
@@ -33,7 +36,7 @@ from langgraph.prebuilt import create_react_agent
 # =============================================================
 
 llm = ChatOllama(model="llama3.1:8b", temperature=0.1)
-CHALLENGES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "challenges")
+CHALLENGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # =============================================================
@@ -46,18 +49,18 @@ def read_file(file_path: str) -> str:
     """Read any challenge file. Use this for briefings, DNS records,
     robots.txt, SSL info, or any text-based evidence.
 
-    Input: file path relative to the challenges/ directory.
-    Examples: 'briefing.txt', 'recon/dns_records.txt', 'recon/ssl_info.txt'
+    Input: file path relative to this challenge's directory.
+    Examples: 'briefing.txt', 'dns_records.txt', 'ssl_info.txt'
     """
     try:
-        safe_path = os.path.normpath(os.path.join(CHALLENGES_DIR, file_path))
-        if not safe_path.startswith(os.path.normpath(CHALLENGES_DIR)):
+        safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
+        if not safe_path.startswith(os.path.normpath(CHALLENGE_DIR)):
             return "Access denied."
         if not os.path.exists(safe_path):
             available = []
-            for root, dirs, files in os.walk(CHALLENGES_DIR):
+            for root, dirs, files in os.walk(CHALLENGE_DIR):
                 for f in files:
-                    available.append(os.path.relpath(os.path.join(root, f), CHALLENGES_DIR))
+                    available.append(os.path.relpath(os.path.join(root, f), CHALLENGE_DIR))
             return f"File not found: {file_path}\nAvailable:\n" + "\n".join(
                 f"  - {f}" for f in available
             )
@@ -90,11 +93,11 @@ def parse_nmap(file_path: str) -> str:
     """Parse a pre-captured nmap scan XML file and return structured results.
     Shows open ports, services, versions, and OS detection.
 
-    Input: path to an nmap XML file (e.g., 'recon/scan_results.xml')
+    Input: path to an nmap XML file (e.g., 'scan_results.xml')
     """
     try:
-        safe_path = os.path.normpath(os.path.join(CHALLENGES_DIR, file_path))
-        if not safe_path.startswith(os.path.normpath(CHALLENGES_DIR)):
+        safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
+        if not safe_path.startswith(os.path.normpath(CHALLENGE_DIR)):
             return "Access denied."
 
         # Also scan raw XML for flag parts hidden in comments
@@ -145,11 +148,11 @@ def analyze_headers(file_path: str) -> str:
     """Analyze pre-captured HTTP response headers for security misconfigurations.
     Checks for missing security headers, server info leakage, and common issues.
 
-    Input: path to a headers file (e.g., 'recon/http_headers.txt')
+    Input: path to a headers file (e.g., 'http_headers.txt')
     """
     try:
-        safe_path = os.path.normpath(os.path.join(CHALLENGES_DIR, file_path))
-        if not safe_path.startswith(os.path.normpath(CHALLENGES_DIR)):
+        safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
+        if not safe_path.startswith(os.path.normpath(CHALLENGE_DIR)):
             return "Access denied."
 
         with open(safe_path, "r") as f:
@@ -205,7 +208,7 @@ def check_cve(search_term: str) -> str:
     Input: a CVE ID (e.g., 'CVE-2021-44228') or software name+version (e.g., 'Apache 2.4.49')
     """
     try:
-        db_path = os.path.join(CHALLENGES_DIR, "cve_database.json")
+        db_path = os.path.join(CHALLENGE_DIR, "cve_database.json")
         with open(db_path, "r") as f:
             cve_db = json.load(f)
 
@@ -275,7 +278,7 @@ agent = create_react_agent(llm, tools)
 # =============================================================
 
 if __name__ == "__main__":
-    print("🔍 CackalackyCon 2026 — Level 2: The Recon Agent")
+    print("🔍 CackalackyCon 2026 — Level 2a: The Recon Agent")
     print("Multi-step reconnaissance analysis. Follow the briefing.\n")
 
     # =============================================================
@@ -283,7 +286,7 @@ if __name__ == "__main__":
     # =============================================================
     # This is the first instruction your agent receives. Tips:
     #   - Tell the agent which files to read and in what order
-    #   - Use EXACT file paths (e.g. 'recon/scan_results.xml' not 'recon/nmap_results.xml')
+    #   - Use EXACT file paths (e.g. 'scan_results.xml' not 'nmap_results.xml')
     #   - Small models work better with explicit step-by-step instructions
     #   - Remind it to look for [FLAG_PART_N: value] tags in each file
     #   - Tell it how to assemble the final flag from the parts

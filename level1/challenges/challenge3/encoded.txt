@@ -1,0 +1,13 @@
+INCIDENT REPORT — ENCODED EVIDENCE
+====================================
+
+A threat actor left behind an encoded string in a log file.
+Our team identified it has been obfuscated in multiple layers.
+
+Encoded string:
+VERGTFJWOUJUbDh3VGpGUFRnPT0=
+
+The flag is: FLAG{<decoded_value>}
+
+Hints:
+- The string has been base64 encoded twice
