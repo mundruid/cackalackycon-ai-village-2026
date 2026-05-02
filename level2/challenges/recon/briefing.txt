@@ -7,15 +7,15 @@ authorized penetration test for Initech Global Solutions.
 Your task: Analyze the pre-captured reconnaissance data and produce
 a structured threat assessment for the client.
 
-Available data files:
-  1. scan_results.xml    — Nmap service/version scan (XML format)
-  2. http_headers.txt    — Captured HTTP response headers from port 80
-  3. dns_records.txt     — DNS enumeration results
-  4. robots_txt.txt      — robots.txt contents from the web server
-  5. ssl_info.txt        — SSL/TLS certificate and cipher details
+Available data files (all in the data/ subdirectory):
+  1. data/scan_results.xml    — Nmap service/version scan (XML format)
+  2. data/http_headers.txt    — Captured HTTP response headers from port 80
+  3. data/dns_records.txt     — DNS enumeration results
+  4. data/robots_txt.txt      — robots.txt contents from the web server
+  5. data/ssl_info.txt        — SSL/TLS certificate and cipher details
 
 Also available:
-  - cve_database.json    — Local CVE database for version lookups
+  - cve_database.json         — Local CVE database for version lookups
 
 MISSION:
   Step 1: Parse the nmap scan to identify all open ports and services
@@ -28,9 +28,9 @@ MISSION:
 
 FLAG INSTRUCTIONS:
   Three of the data files contain a fragment marked with [FLAG_PART_N: value]:
-    - scan_results.xml  → FLAG_PART_1
-    - http_headers.txt  → FLAG_PART_2
-    - ssl_info.txt      → FLAG_PART_3
+    - data/scan_results.xml  → FLAG_PART_1
+    - data/http_headers.txt  → FLAG_PART_2
+    - data/ssl_info.txt      → FLAG_PART_3
   Concatenate the three values to form: FLAG{part1part2part3}
 
 Good hunting.

@@ -50,7 +50,7 @@ def read_file(file_path: str) -> str:
     robots.txt, SSL info, or any text-based evidence.
 
     Input: file path relative to this challenge's directory.
-    Examples: 'briefing.txt', 'dns_records.txt', 'ssl_info.txt'
+    Examples: 'briefing.txt', 'data/dns_records.txt', 'data/ssl_info.txt'
     """
     try:
         safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
@@ -93,7 +93,7 @@ def parse_nmap(file_path: str) -> str:
     """Parse a pre-captured nmap scan XML file and return structured results.
     Shows open ports, services, versions, and OS detection.
 
-    Input: path to an nmap XML file (e.g., 'scan_results.xml')
+    Input: path to an nmap XML file (e.g., 'data/scan_results.xml')
     """
     try:
         safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
@@ -148,7 +148,7 @@ def analyze_headers(file_path: str) -> str:
     """Analyze pre-captured HTTP response headers for security misconfigurations.
     Checks for missing security headers, server info leakage, and common issues.
 
-    Input: path to a headers file (e.g., 'http_headers.txt')
+    Input: path to a headers file (e.g., 'data/http_headers.txt')
     """
     try:
         safe_path = os.path.normpath(os.path.join(CHALLENGE_DIR, file_path))
@@ -286,7 +286,7 @@ if __name__ == "__main__":
     # =============================================================
     # This is the first instruction your agent receives. Tips:
     #   - Tell the agent which files to read and in what order
-    #   - Use EXACT file paths (e.g. 'scan_results.xml' not 'nmap_results.xml')
+    #   - Use EXACT file paths (e.g. 'data/scan_results.xml' not 'scan_results.xml')
     #   - Small models work better with explicit step-by-step instructions
     #   - Remind it to look for [FLAG_PART_N: value] tags in each file
     #   - Tell it how to assemble the final flag from the parts
