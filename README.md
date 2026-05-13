@@ -14,7 +14,7 @@
 
 A 2-hour, hands-on workshop where you build AI agents that solve security challenges — entirely on your laptop, entirely for free. No cloud accounts. No API keys. No internet required during the workshop.
 
-You'll use **Python**, **LangChain**, and **Ollama** (local LLMs) to build agents that crack CTF challenges, perform reconnaissance analysis, and run a multi-agent SOC response pipeline.
+You'll use **Python**, **LangChain**, and **Ollama** (local LLMs) to build agents that crack CTF challenges, perform reconnaissance, analyze malware samples, and run a multi-agent SOC response pipeline.
 
 ---
 
@@ -22,8 +22,9 @@ You'll use **Python**, **LangChain**, and **Ollama** (local LLMs) to build agent
 
 | Level | Name | Difficulty | What You Build |
 |-------|------|------------|----------------|
-| **L1** | The Solo Agent | 🟢 Beginner | Single agent with web search + file reader tools that solves CTF challenges (password cracking, OSINT, log analysis) |
-| **L2** | The Recon Agent | 🟡 Intermediate | Multi-step agent that analyzes pre-captured nmap scans, HTTP headers, DNS records, and correlates CVEs |
+| **L1** | The Solo Agent | 🟢 Beginner | Single agent with file-reader and code-execution tools that solves CTF challenges (decoding, OSINT, multi-layer obfuscation) |
+| **L2A** | The Recon Agent | 🟡 Intermediate | Multi-step agent that analyzes pre-captured nmap scans, HTTP headers, DNS records, and correlates CVEs — you write the system and user prompts |
+| **L2B** | The Malware Analyst | 🟡 Intermediate | Multi-step agent that reads malware samples, deobfuscates payloads, and maps behavior to MITRE ATT&CK techniques |
 | **L3** | The SOC Squad | 🔴 Advanced | Three agents (Triage → Threat Intel → Response Advisor) collaborating on incident response |
 
 **Everyone** does Level 1. Levels 2 and 3 are for those who want to push further.
@@ -80,6 +81,47 @@ Alternative recommended models:
 | Apple Silicon (M1/M2/M3/M4) | `llama3.1:8b` | Ollama uses Metal acceleration — runs great. |
 
 If your model seems stuck or very slow, try: `ollama pull llama3.2:3b` and use that instead.
+
+</details>
+
+<details>
+<summary><strong>☁️ Alternative: Ollama Cloud (Free Tier) — click to expand</strong></summary>
+
+Low on RAM? Want to skip the multi-gigabyte downloads or try a much larger model than your laptop can run? **Ollama Cloud** has a free tier that hosts models behind the same Ollama API — your agent code doesn't change, only the model name does.
+
+**What the free tier gives you ($0, no credit card):**
+
+- Access to cloud-hosted models (e.g. `gpt-oss:120b-cloud`) — pulling them does *not* download multi-GB weights, it's a tiny pointer
+- "Light" usage allocation — sized for things like a 2-hour workshop, not sustained production traffic
+- Run 1 cloud model at a time
+- Session limits reset every 5 hours; weekly limits reset every 7 days (specific numbers aren't published — watch for rate-limit responses)
+
+**Setup:**
+
+1. Create a free account at [ollama.com](https://ollama.com).
+2. Sign in from the CLI:
+   ```bash
+   ollama signin
+   ```
+3. Pull a cloud model (instant — no real download):
+   ```bash
+   ollama pull gpt-oss:120b-cloud
+   ```
+4. In any `agent.py` (or `level3/soc_squad.py`), change the model name:
+   ```python
+   llm = ChatOllama(
+       model="gpt-oss:120b-cloud",
+       temperature=0,
+   )
+   ```
+   The L2 malware agent also accepts `--model` on the command line:
+   ```bash
+   uv run python level2/challenges/malware/agent.py --model gpt-oss:120b-cloud
+   ```
+
+Browse all cloud models at [ollama.com/search?c=cloud](https://ollama.com/search?c=cloud).
+
+> ⚠️ **Cloud models need internet.** Conference WiFi is unreliable — keep the local `llama3.1:8b` / `llama3.2:3b` pulls as your fallback. Treat cloud as a nice-to-have, not the primary path.
 
 </details>
 
@@ -220,6 +262,7 @@ pip install langchain langchain-ollama langchain-core langgraph duckduckgo-searc
 ## 📚 Resources
 
 - [Ollama Documentation](https://github.com/ollama/ollama)
+- [Ollama Cloud Docs](https://docs.ollama.com/cloud) — using hosted models with the free tier
 - [LangChain + Ollama Integration](https://python.langchain.com/docs/integrations/llms/ollama/)
 - [LangGraph Agent Tutorial](https://langchain-ai.github.io/langgraph/tutorials/)
 - [MITRE ATT&CK Framework](https://attack.mitre.org/) (for L2/L3 context)
