@@ -141,7 +141,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 ### 4. Clone This Repo and Install Dependencies
 
 ```bash
-git clone https://github.com/skisec/cackalacky-ai-village-2026.git
+git clone https://github.com/mundruid/cackalacky-ai-village-2026.git
 cd cackalacky-ai-village-2026
 
 # This one command creates a venv, installs Python 3.12, and all dependencies:
