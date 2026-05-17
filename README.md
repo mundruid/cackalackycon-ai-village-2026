@@ -16,6 +16,8 @@ A 2-hour, hands-on workshop where you build AI agents that solve security challe
 
 You'll use **Python**, **LangChain**, and **Ollama** (local LLMs) to build agents that crack CTF challenges, perform reconnaissance, analyze malware samples, and run a multi-agent SOC response pipeline.
 
+> 📑 **New to this repo?** Start with the [workshop slides](docs/CackalackyCon2026_AI_Village.pdf) — they walk through the concepts and guide you level by level.
+
 ---
 
 ## 📋 What You'll Build
@@ -261,6 +263,7 @@ pip install langchain langchain-ollama langchain-core langgraph duckduckgo-searc
 
 ## 📚 Resources
 
+- [Workshop Slides](docs/CackalackyCon2026_AI_Village.pdf)
 - [Ollama Documentation](https://github.com/ollama/ollama)
 - [Ollama Cloud Docs](https://docs.ollama.com/cloud) — using hosted models with the free tier
 - [LangChain + Ollama Integration](https://python.langchain.com/docs/integrations/llms/ollama/)
